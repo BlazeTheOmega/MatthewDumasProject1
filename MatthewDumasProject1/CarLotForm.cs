@@ -105,6 +105,8 @@ namespace MatthewDumasProject1
 
             Controls.Add(btnCreateShopper);
 
+            btnCreateShopper.Click += BtnCreateShopper_Click;
+
             // Purchase car button
             btnPurchaseCar = new Button
             {
@@ -171,6 +173,35 @@ namespace MatthewDumasProject1
                         "Invalid Car",
                         MessageBoxButtons.OK,
                         MessageBoxIcon.Warning);
+                }
+            }
+        }
+
+        private void BtnCreateShopper_Click(
+            object? sender, EventArgs e)
+        {
+            using CreateShopperForm shopperForm =
+                new CreateShopperForm();
+
+            if (shopperForm.ShowDialog(this) == DialogResult.OK)
+            {
+                Shopper? newShopper = shopperForm.CreatedShopper;
+
+                if (newShopper != null)
+                {
+                    shopper = newShopper;
+
+                    lblShopperName.Text =
+                        $"Shopper: {shopper.Name}";
+
+                    lblMoneyAvailable.Text =
+                        $"Money Available: {shopper.MoneyAvailable:C2}";
+
+                    MessageBox.Show(
+                        $"Shopper {shopper.Name} created successfully!",
+                        "Shopper Created",
+                        MessageBoxButtons.OK,
+                        MessageBoxIcon.Information);
                 }
             }
         }
