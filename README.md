@@ -1,15 +1,7 @@
-MatthewDumasProject1/
-│
-├── Model/
-│   ├── Car.cs
-│   ├── CarLot.cs
-│   └── Shopper.cs
-│
-├── CarLotForm.cs
-├── CarLotForm.Designer.cs
-├── AddCarForm.cs
-├── CreateShopperForm.cs
-├── InventoryDetailsForm.cs
-├── Program.cs
-├── notes.txt
-└── README.md
+MatthewDumasProject1
+
+Project Description
+
+The Car Lot Management System is a Windows Forms application developed in C#. The application allows users to manage a car dealership's inventory, create shoppers, and purchase vehicles.
+
+The program uses object-oriented programming principles to organize vehicle information, manage dealership inventory, and track shopper purchases.
