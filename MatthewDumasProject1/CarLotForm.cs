@@ -117,6 +117,8 @@ namespace MatthewDumasProject1
 
             Controls.Add(btnPurchaseCar);
 
+            btnPurchaseCar.Click += BtnPurchaseCar_Click;
+
             // Inventory details button
             btnInventoryDetails = new Button
             {
@@ -204,6 +206,106 @@ namespace MatthewDumasProject1
                         MessageBoxIcon.Information);
                 }
             }
+        }
+
+        private void BtnPurchaseCar_Click(object? sender, EventArgs e)
+        {
+            // Check if a shopper has been created
+            if (shopper == null)
+            {
+                MessageBox.Show(
+                    "Please create a shopper before purchasing a car.",
+                    "No Shopper",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Check if a vehicle is selected
+            int selectedIndex = lstInventory.SelectedIndex;
+
+            if (selectedIndex < 0)
+            {
+                MessageBox.Show(
+                    "Please select a car from the inventory.",
+                    "No Car Selected",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Retrieve the selected vehicle
+            Car selectedCar = carLot.Inventory[selectedIndex];
+
+            // Calculate the purchase price including tax
+            decimal totalCost =
+                carLot.GetTotalCostOfPurchase(selectedCar);
+
+            // Check if the shopper has enough money
+            if (!shopper.CanPurchase(totalCost))
+            {
+                MessageBox.Show(
+                    $"You do not have enough money to purchase this car.\n\n" +
+                    $"Vehicle: {selectedCar.Make} {selectedCar.Model}\n" +
+                    $"Total Cost: {totalCost:C2}\n" +
+                    $"Money Available: {shopper.MoneyAvailable:C2}",
+                    "Insufficient Funds",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Warning);
+                return;
+            }
+
+            // Confirm the purchase
+            DialogResult confirmation = MessageBox.Show(
+                $"Would you like to purchase this vehicle?\n\n" +
+                $"Vehicle: {selectedCar.Make} {selectedCar.Model}\n" +
+                $"Price: {selectedCar.Price:C2}\n" +
+                $"Tax Rate: {CarLot.TaxRate:P1}\n" +
+                $"Total Cost: {totalCost:C2}",
+                "Confirm Purchase",
+                MessageBoxButtons.YesNo,
+                MessageBoxIcon.Question);
+
+            if (confirmation != DialogResult.Yes)
+            {
+                return;
+            }
+
+            // Remove the purchased car from inventory
+            Car? purchasedCar = carLot.PurchaseCar(
+                selectedCar.Make,
+                selectedCar.Model);
+
+            if (purchasedCar == null)
+            {
+                MessageBox.Show(
+                    "The selected vehicle is no longer available.",
+                    "Purchase Failed",
+                    MessageBoxButtons.OK,
+                    MessageBoxIcon.Error);
+                return;
+            }
+
+            // Add the vehicle to the shopper's purchased cars
+            shopper.PurchaseCar(purchasedCar, totalCost);
+
+            // Update shopper's remaining balance
+            lblMoneyAvailable.Text =
+                $"Money Available: {shopper.MoneyAvailable:C2}";
+
+            // Refresh inventory after purchase
+            RefreshInventory();
+
+            // Display successful purchase message
+            MessageBox.Show(
+                $"Congratulations, {shopper.Name}!\n\n" +
+                $"You purchased a {purchasedCar.Make} " +
+                $"{purchasedCar.Model}!\n\n" +
+                $"Total Paid: {totalCost:C2}\n" +
+                $"Remaining Balance: {shopper.MoneyAvailable:C2}",
+                "Purchase Successful",
+                MessageBoxButtons.OK,
+                MessageBoxIcon.Information);
         }
     }
 }
