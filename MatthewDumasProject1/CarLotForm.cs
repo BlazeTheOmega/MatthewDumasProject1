@@ -45,6 +45,8 @@ namespace MatthewDumasProject1
             ToolStripMenuItem detailsItem =
                 new ToolStripMenuItem("Inventory Details");
 
+            detailsItem.Click += BtnInventoryDetails_Click;
+
             inventoryMenu.DropDownItems.Add(addCarItem);
             inventoryMenu.DropDownItems.Add(detailsItem);
 
@@ -126,6 +128,8 @@ namespace MatthewDumasProject1
                 Location = new Point(430, 470),
                 Size = new Size(180, 45)
             };
+
+            btnInventoryDetails.Click += BtnInventoryDetails_Click;
 
             Controls.Add(btnInventoryDetails);
 
@@ -306,6 +310,15 @@ namespace MatthewDumasProject1
                 "Purchase Successful",
                 MessageBoxButtons.OK,
                 MessageBoxIcon.Information);
+        }
+
+        private void BtnInventoryDetails_Click(
+            object? sender, EventArgs e)
+        {
+            using InventoryDetailsForm detailsForm =
+                new InventoryDetailsForm(carLot);
+
+            detailsForm.ShowDialog(this);
         }
     }
 }
